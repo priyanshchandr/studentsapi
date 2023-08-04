@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>College API UI</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: white;
+      border: 1px solid #ddd;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 5px;
+      margin-top: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      margin-top: 20px;
+    }
+
+    button {
+      padding: 10px 15px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    input[type="text"] {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    pre {
+      background-color: #f5f5f5;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      white-space: pre-wrap;
+      overflow-wrap: break-word;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <h1>College API UI</h1>
+
+  <div class="container">
+    <h2>/get_students</h2>
+    <button id="get-students">Get Students</button>
+    <pre id="get-students-result"></pre>
+
+    <h2>/enrolled_students</h2>
+    <button id="enrolled-students">Enrolled Students</button>
+    <pre id="enrolled-students-result"></pre>
+
+    <h2>/gg_group</h2>
+    <button id="gg-group">Low Attendance Group</button>
+    <pre id="gg-group-result"></pre>
+
+    <h2>/course/:courseCode</h2>
+    <div>
+      <input type="text" id="course-code" placeholder="Enter Course Code">
+      <button id="course">Get Course Students</button>
+    </div>
+    <pre id="course-result"></pre>
+
+    <h2>/student/:roll</h2>
+    <div>
+      <input type="text" id="student-roll" placeholder="Enter Student Roll">
+      <button id="student">Get Student Details</button>
+    </div>
+    <pre id="student-result"></pre>
+  </div>
+
+  <script>
+    function fetchData(endpoint, target) {
+      fetch(endpoint)
+        .then(response => response.json())
+        .then(data => {
+          document.querySelector(target).textContent = JSON.stringify(data, null, 2);
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('get-students').addEventListener('click', () => {
+        fetchData('http://localhost:3000/get_students', '#get-students-result');
+      });
+
+      document.getElementById('enrolled-students').addEventListener('click', () => {
+        fetchData('http://localhost:3000/enrolled_students', '#enrolled-students-result');
+      });
+
+      document.getElementById('gg-group').addEventListener('click', () => {
+        fetchData('http://localhost:3000/gg_group', '#gg-group-result');
+      });
+
+      document.getElementById('course').addEventListener('click', () => {
+        const courseCode = document.getElementById('course-code').value;
+        fetchData(`http://localhost:3000/course/${courseCode}`, '#course-result');
+      });
+
+      document.getElementById('student').addEventListener('click', () => {
+        const studentRoll = document.getElementById('student-roll').value;
+        fetchData(`http://localhost:3000/student/${studentRoll}`, '#student-result');
+      });
+    });
+  </script>
+</body>
+</html>
